@@ -1,0 +1,37 @@
+# AuthWatch ornek log yigini. Uc bicim bir arada: SSH auth.log, JSON ve combined.
+# Icinde bilerek uc farkli senaryo var:
+#   203.0.113.5  -> klasik brute-force (kullanici tarama, sabit aralik)  -> high
+Sep 17 08:15:00 srv01 sshd[5100]: Accepted password for deniz from 198.51.100.7 port 44000 ssh2
+Sep 17 09:42:10 srv01 sshd[5210]: Failed password for deniz from 198.51.100.7 port 44102 ssh2
+Sep 17 09:42:16 srv01 sshd[5211]: Failed password for deniz from 198.51.100.7 port 44106 ssh2
+Sep 17 09:42:41 srv01 sshd[5212]: Failed password for deniz from 198.51.100.7 port 44110 ssh2
+Sep 17 09:42:47 srv01 sshd[5213]: Failed password for deniz from 198.51.100.7 port 44118 ssh2
+Sep 17 09:43:00 srv01 sshd[5214]: Failed password for deniz from 198.51.100.7 port 44121 ssh2
+#   192.0.2.44   -> basarisizliklardan sonra basarili giris              -> takeover
+Sep 17 03:12:01 srv01 sshd[4101]: Failed password for invalid user admin from 203.0.113.5 port 52344 ssh2
+Sep 17 03:12:04 srv01 sshd[4102]: Failed password for invalid user oracle from 203.0.113.5 port 52350 ssh2
+Sep 17 03:12:07 srv01 sshd[4103]: Failed password for root from 203.0.113.5 port 52356 ssh2
+Sep 17 03:12:10 srv01 sshd[4104]: Failed password for invalid user postgres from 203.0.113.5 port 52362 ssh2
+Sep 17 03:12:13 srv01 sshd[4105]: Failed password for invalid user test from 203.0.113.5 port 52368 ssh2
+Sep 17 03:12:16 srv01 sshd[4106]: Failed password for invalid user git from 203.0.113.5 port 52374 ssh2
+Sep 17 03:12:19 srv01 sshd[4107]: Connection closed by 203.0.113.5 port 52374 [preauth]
+Sep 17 22:05:00 srv02 sshd[8801]: Failed password for hasan from 192.0.2.44 port 61000 ssh2
+Sep 17 22:05:09 srv02 sshd[8802]: Failed password for hasan from 192.0.2.44 port 61004 ssh2
+Sep 17 22:05:18 srv02 sshd[8803]: Failed password for hasan from 192.0.2.44 port 61008 ssh2
+Sep 17 22:05:27 srv02 sshd[8804]: Failed password for hasan from 192.0.2.44 port 61012 ssh2
+Sep 17 22:05:36 srv02 sshd[8805]: Failed password for hasan from 192.0.2.44 port 61016 ssh2
+Sep 17 22:05:45 srv02 sshd[8806]: Failed password for hasan from 192.0.2.44 port 61020 ssh2
+Sep 17 22:05:54 srv02 sshd[8807]: Accepted password for hasan from 192.0.2.44 port 61024 ssh2
+{"ts":"2026-09-17T11:00:01Z","ip":"203.0.113.9","user":"admin","event":"login_failed","service":"web"}
+{"ts":"2026-09-17T11:00:04Z","ip":"203.0.113.9","user":"admin","event":"login_failed","service":"web"}
+{"ts":"2026-09-17T11:00:07Z","ip":"203.0.113.9","user":"editor","event":"login_failed","service":"web"}
+{"ts":"2026-09-17T11:00:10Z","ip":"203.0.113.9","user":"support","event":"login_failed","service":"web"}
+{"ts":"2026-09-17T11:00:13Z","ip":"203.0.113.9","user":"root","event":"login_failed","service":"web"}
+{"ts":"2026-09-17T11:00:20Z","ip":"10.0.4.18","user":"raporlama","event":"success","service":"web"}
+203.0.113.77 - - [17/Sep/2026:14:30:00 +0000] "POST /login HTTP/1.1" 401 220 "-" "python-requests/2.32"
+203.0.113.77 - - [17/Sep/2026:14:30:02 +0000] "POST /login HTTP/1.1" 401 220 "-" "python-requests/2.32"
+203.0.113.77 - - [17/Sep/2026:14:30:04 +0000] "POST /login HTTP/1.1" 401 220 "-" "python-requests/2.32"
+203.0.113.77 - - [17/Sep/2026:14:30:06 +0000] "POST /login HTTP/1.1" 401 220 "-" "python-requests/2.32"
+203.0.113.77 - - [17/Sep/2026:14:30:08 +0000] "POST /login HTTP/1.1" 401 220 "-" "python-requests/2.32"
+203.0.113.77 - - [17/Sep/2026:14:30:10 +0000] "GET /haberler HTTP/1.1" 200 5120 "-" "python-requests/2.32"
+bu satir hicbir bicime uymuyor ve bozuk satir olarak sayilmali
