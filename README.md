@@ -1,6 +1,7 @@
-# 🚨 AuthWatch — Kimlik Doğrulama Log Analizi ve Brute-Force Tespiti
+# 🚨 Kaba Kuvvet Saldırı Tespiti (AuthWatch)
 
 <p align="center">
+  <em>Kimlik Doğrulama Log Analizi ve Brute-Force Tespiti</em><br>
   <strong>Kayan zaman penceresi · yanlış pozitif ayıklama · hesap ele geçirme tespiti</strong>
 </p>
 
@@ -12,6 +13,48 @@
   <img src="https://img.shields.io/badge/Tests-48%20passing-brightgreen" alt="Tests">
   <img src="https://img.shields.io/badge/License-MIT-yellow" alt="License">
 </p>
+
+---
+
+## 🧭 Kısaca: Bu Proje Ne İşe Yarar?
+
+Bir sunucuya her giriş denemesi log dosyasına bir satır olarak yazılır. Bu
+araç o satırları okur ve birinin **şifre deneye deneye hesaba girmeye
+çalışıp çalışmadığını** bulur. Bu saldırının adı "kaba kuvvet" ya da
+brute-force'tur.
+
+Asıl iş, iki durumu birbirinden ayırmaktır: şifresini unutup üç kez yanlış
+yazan çalışan ile saniyede onlarca kullanıcı adı deneyen bot. İkisi de
+"başarısız giriş" olarak görünür. AuthWatch her alarma bir **güven
+seviyesi** (düşük / orta / yüksek) verir ve bu seviyeyi **neden** verdiğini
+düz cümlelerle yazar. Bir dizi başarısız denemenin ardından gelen başarılı
+giriş ayrıca işaretlenir, çünkü bu **hesabın ele geçirilmiş olabileceğini**
+gösterir.
+
+**Kimin işine yarar?** Sunucu yöneticilerinin, SOC / mavi takım analistlerinin
+ve log analizini öğrenen siber güvenlik öğrencilerinin.
+
+| Siz verirsiniz | Araç size verir |
+|---|---|
+| SSH `auth.log`, nginx/apache erişim logu ya da JSON satırları | Alarm listesi: saldıran IP, denenen kullanıcı adları, güven seviyesi, gerekçeler |
+| İsterseniz eşik ("60 saniyede 5 deneme") ve hiç alarm üretilmeyecek IP'ler | IP ve kullanıcı bazında istatistik, okunamayan satırların dökümü |
+
+### ⚡ 3 Adımda Kullanım
+
+1. **Kurun ve başlatın:** `docker compose up --build`. Docker kullanmıyorsanız
+   aşağıdaki [Kurulum](#-kurulum) bölümüne bakın. Arayüz
+   http://localhost:8000/docs adresinde açılır.
+2. **Depodaki örnek logu yükleyin:**
+   ```bash
+   curl -F "file=@data/sample-auth.log" "http://localhost:8000/ingest/file?year_hint=2026"
+   ```
+3. **Yüksek güvenli alarmlara bakın:**
+   ```bash
+   curl "http://localhost:8000/alerts?confidence=high"
+   ```
+
+Kendi sunucunuzda denemek için 2. adımdaki dosyayı `/var/log/auth.log` ile
+değiştirmeniz yeterli.
 
 ---
 
@@ -270,8 +313,8 @@ ham satır ──► ayrıştır ──► ilgisiz mi? ──► say, geç
 ## 🚀 Kurulum
 
 ```bash
-git clone https://github.com/hasancrlk/authwatch.git
-cd authwatch
+git clone https://github.com/hasancrlk/kaba-kuvvet-saldiri-tespiti.git
+cd kaba-kuvvet-saldiri-tespiti
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 cp .env.example .env
@@ -421,7 +464,7 @@ ruff check app tests
 ## 📁 Proje Yapısı
 
 ```
-authwatch/
+kaba-kuvvet-saldiri-tespiti/
 ├── app/
 │   ├── core/
 │   │   ├── parsers.py      # 3 log biçimi, olay/ilgisiz/bozuk ayrımı
